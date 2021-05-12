@@ -57,7 +57,7 @@ and if `end` is omitted it is assumed to be the last character in the
 string:
 
 ```bash
-"string"[0:3] // "str"
+"string"[:3] // "str"
 "string"[1:] // "tring"
 ```
 
@@ -257,6 +257,14 @@ Formats a string ([sprintf convention](https://linux.die.net/man/3/sprintf)):
 
 ```bash
 "hello %s".fmt("world") # "hello world"
+```
+
+In order to print a literal `%`, you can simply escape it with another `%%`:
+
+```bash
+"30%%".fmt() # 30%
+"30%% %s".fmt("higher") # 30% higher
+"30%".fmt() # 30%!(NOVERB)
 ```
 
 ### index(str)

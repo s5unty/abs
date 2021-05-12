@@ -5,7 +5,7 @@ permalink: /syntax/system-commands
 # System (shell) commands
 
 Executing system commands is one of the most important features
-of ABS, as it allows mixing the conveniency of the shell with
+of ABS, as it allows mixing the convenience of the shell with
 the syntax of a modern programming language.
 
 Commands are executed with the `` `command` `` syntax,
@@ -97,7 +97,7 @@ declared within your program using the `$` symbol:
 
 ```bash
 file = "cpuinfo"
-x = $(cat /proc/$file)
+x = `cat /proc/$file`
 echo(x) # processor: 0\nvendor_id: GenuineIntel...
 ```
 
@@ -115,6 +115,20 @@ simply need to escape them with a `\`:
 ```bash
 `echo $PWD` # "" since the ABS variable PWD doesn't exist
 `echo \$PWD` # "/go/src/github.com/abs-lang/abs"
+```
+
+## Using a different shell
+
+By default, ABS uses `bash -c` to execute commands; on Windows
+it instead uses `cmd.exe /C`.
+
+You can specify which shell to use by setting the environment
+variable `ABS_COMMAND_EXECUTOR`:
+
+```sh
+`echo \$0` # bash
+env("ABS_COMMAND_EXECUTOR", "sh -c")
+`echo \$0` # sh
 ```
 
 ## Alternative \$() syntax
@@ -182,11 +196,3 @@ if filename.prefix('~/') || filename.prefix(homedir) {
 # execute the command with live stdIO
 exec("$sudo $cmd $filename")
 ```
-
-## Limitations
-
-Note that the implementation of system commands
-requires the `bash` executable to [be available on the system](https://github.com/abs-lang/abs/blob/5b5b0abf3115a5dd4dfe8485501f8765985ad0db/evaluator/evaluator.go#L696-L722).
-On Windows, commands are executed through [cmd.exe](https://github.com/abs-lang/abs/blob/ee793641be09ad8572c3e913fef8468f69b0c0a2/evaluator/evaluator.go#L1101-L1103).
-Future work will make it possible to select which shell to use,
-as well as bypassing the shell altogether (see [#73](https://github.com/abs-lang/abs/issues/73)).
